@@ -2,20 +2,28 @@ import React from 'react';
 import Card from './Card';
 
 
-function CardList(props) {
-  const robots = props.robots
-  const cardList = robots.map(card => {
-  	return(
-  	//add the key to child where you generate it 	
-  	  <Card key={card.id} card={card} />
+function CardList( {movies, movieClick} ) {  
+  const cardList = movies.map(movie => {
+  	return(  	
+  	  <Card 
+        key={movie.id}
+        movieClick={movieClick} 
+        movie={movie} 
+      />
   	)  	
   })
 
   return (
-    <div className="card-list">
-  	  {cardList}
+    <div className="card-wrapper">
+      <div className="arrow"></div>
+      <div className="card-list">
+        {cardList}
+      </div>  
     </div>
+    
   );
 }
 
 export default CardList;
+
+

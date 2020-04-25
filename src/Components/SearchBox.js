@@ -8,7 +8,7 @@ function SearchBox(props) {
 	  <div>
 	    <input 
 	      type='search'
-	      placeholder='search robots' 
+	      placeholder='search movie' 
 	      onChange={props.onSearch}
 	    />
 	  </div>
