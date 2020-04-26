@@ -15,6 +15,8 @@ class App extends Component {
       top_rated: [],
       upcoming: [],      
       movieSelect: {},
+      cast: [],
+      crew:[],      
       route: 'home',      
       searchfield: ''    
     }    
@@ -25,16 +27,9 @@ class App extends Component {
     movieCategories.forEach((movieCategory, i) => {
       fetch(`https://api.themoviedb.org/3/movie/${movieCategory}?api_key=${apiKey}&language=en-US&page=1`)  
         .then(resp => resp.json())
-        .then(data => {
-          if(movieCategory === 'popular') {
-            this.setState({popular: data.results});            
-          } else if(movieCategory === 'top_rated') {
-            this.setState({top_rated: data.results});            
-          } else {
-            this.setState({upcoming: data.results});            
-          }
-      })          
+        .then(data => this.setState({[movieCategory]: data.results}) )          
     })
+    //scroll event     
     window.addEventListener('scroll', this.handleScroll, true);
   };
 
@@ -51,12 +46,23 @@ class App extends Component {
   movieClick = (id) => {
     fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`)
       .then(resp => resp.json())
-      .then(movie => {        
-        this.setState({
+      .then(movie => {
+        if(movie) {
+          this.setState({
           movieSelect: movie,
           route: 'movie'          
-        });    
-      })        
+          });      
+        } else {
+          console.log(movie)
+        }               
+      })
+      
+    fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}`)
+      .then(resp => resp.json())
+      .then(credit => this.setState({
+        cast: credit.cast,
+        crew: credit.crew
+      }))          
   };
 
   logoClick = (route) => {
@@ -65,23 +71,23 @@ class App extends Component {
 
   handleScroll = () => {
     let y = window.scrollY;
-    const navbar = document.querySelector('.navbar');
-    console.log(y);
-    if(y > 535) {
+    //use plain js codes
+    const navbar = document.querySelector('.navbar');    
+    if(y > 60) {
       navbar.style.backgroundColor = "black";
     } else {
       navbar.style.backgroundColor = "transparent";
     }
   }
 
-
-  render() {
+  render() {    
     let moviePick;    
-    const { popular, top_rated, upcoming, movieSelect, route } = this.state;
-    if(popular[0] === undefined || top_rated[0] === undefined || upcoming[0] === undefined) {
+    const { popular, top_rated, upcoming, movieSelect, cast, crew, route } = this.state;
+    //data  validation for state properties
+    if(!popular[0] || !top_rated[0] || !upcoming[0]) {
       moviePick = []  
     } else {
-      moviePick = [popular[2], top_rated[3], upcoming[0]]  
+      moviePick = [popular[0], top_rated[3], upcoming[0]]  
     }
     
     return (      
@@ -115,7 +121,11 @@ class App extends Component {
             </div>                       
           </div>
           :<div>            
-            <OneMovie movieSelect={movieSelect} />
+            <OneMovie 
+              movieSelect={movieSelect} 
+              cast={cast}
+              crew={crew}
+            />
           </div>
         }
       </div>

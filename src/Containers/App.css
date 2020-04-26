@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Roboto&display=swap');
 
 * {
   box-sizing: border-box;
@@ -6,7 +6,7 @@
   margin: 0;
 }
 body {
-  font-family: Verdana;
+  font-family: 'Roboto', sans-serif;
   text-align: center;
   background-color: #000;
   color: #fff;
@@ -37,12 +37,24 @@ nav ul li a {
   text-decoration: none;
   color: #fff;
 }
+nav ul li a:hover {
+  color: #ccc;
+}
 nav ul li.logo {
   font-family: 'Anton', sans-serif;
   font-size: 1.2rem;
   padding: 0 0.5rem;  
   background-color: #F5C518;  
   cursor: pointer;
+}
+nav ul li.logo a {
+  color: #000;
+}
+nav ul li.logo:hover {
+  background-color: black;    
+}
+nav ul li.logo:hover a {
+  color: #ccc; 
 }
 
 /* showcase */
@@ -109,7 +121,8 @@ div.image-container:nth-child(3) {
 /*card style*/
 .card-wrapper {
   width: 100%;
-  overflow: scroll;  
+  overflow-y: hidden;
+  overflow-x: scroll;  
 }
 
 .card-list {
@@ -127,7 +140,11 @@ div.image-container:nth-child(3) {
   border-radius: 10px;
   box-shadow: 5px 5px 5px #666;
   color: #fff;
-  cursor: pointer;    
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;    
+}
+.card:hover {
+  transform: scale(1.1);
 }
 
 .card img {
@@ -146,11 +163,13 @@ div.image-container:nth-child(3) {
 /* one-movie section */
 div.one-movie div.showcase img {
   width: 100%;  
+  height: 100vh;
+  margin-bottom: 2rem;
 }
 
 div.one-movie div.showcase div.info {
   position: absolute;
-  top: 40%;
+  top: 50%;
   left: 5%;  
   background-color: rgba(0,0,0,0.5);  
   width: 40%;
@@ -182,8 +201,43 @@ div.one-movie div.showcase div.info p.rating span {
   font-size: 1.8rem;
 }
 
+div.one-movie div.up-section {
+  width: 80%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 2.5fr 1fr;
+  justify-items: start;
+  align-items: start;
+  grid-column-gap: 2rem;
+
+}
+div.one-movie div.details p {
+  width: 80%;
+  margin: 1rem;
+  text-align: left;
+}
+div.one-movie div.lower-section {
+  width: 80%;
+  margin: 2rem auto;
+}
+div.one-movie div.cast-container,
+div.one-movie div.crew-container { 
+  margin: 2rem 0;     
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+div.one-movie div.cast-container p, 
+div.one-movie div.cast-container p {
+  width: 150px;
+}
+div.one-movie p.character {
+  color: #F5C518;
+}  
+
 /* utilities */
 h1 {
+  font-family: 'Anton', sans-serif;
   color: #F5C518;
   text-align: left;
   margin: 1rem 2rem 0.5rem;
