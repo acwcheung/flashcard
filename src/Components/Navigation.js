@@ -2,25 +2,12 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
-function Navigation( {logoClick, handleSearch, getSearch, movieClick } )  {
+function Navigation( {logoClick, handleSearch, imageSearch} )  {
   
   const iconClick = () => {    
     const body = document.querySelector('body');
     body.classList.toggle('open');
   } 
-
-  
-  const titleImages = getSearch.map(item => {
-    if(!item.poster_path) { return null }
-    return (
-      <img 
-        key={item.id}
-        src={`http://image.tmdb.org/t/p/w92/${item.poster_path}`} 
-        alt={item.title} 
-        onClick={() => movieClick(item.id)}
-      />      
-    )
-  })
 
   return(
 	  <nav className="navbar">
@@ -42,9 +29,12 @@ function Navigation( {logoClick, handleSearch, getSearch, movieClick } )  {
           />
         </li>
       </ul>
-      <div className="search-results">
-        {titleImages}
+      <div className="search-wrapper">
+        <div className="search-results">
+          {imageSearch}
+        </div>  
       </div>
+      
 	  	
 	  </nav>
 

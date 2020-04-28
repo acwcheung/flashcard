@@ -18,7 +18,8 @@ class App extends Component {
       cast: [],
       crew:[],      
       route: 'home',
-      movieSearch: []      
+      movieSearch: [],
+      movieRec: []      
     }    
   };
 
@@ -51,16 +52,24 @@ class App extends Component {
   movieClick = (id) => {
     fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`)
       .then(resp => resp.json())
-      .then(movie => {        
-        this.setState({movieSelect: movie, route: 'movie', movieSearch: []});        
-      })
-      
+      .then(movie => this.setState({
+          movieSelect: movie, 
+          route: 'movie', 
+          movieSearch: []
+        })        
+      )
+      .catch(err => console.log('failed to fetch data'));
+
     fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}`)
       .then(resp => resp.json())
       .then(credit => this.setState({
         cast: credit.cast,
         crew: credit.crew
-      }))          
+      })) 
+
+    fetch(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=${apiKey}&language=en-US&page=1`)
+      .then(resp => resp.json())
+      .then(movie => this.setState({ movieRec: movie.results }))
   };
 
   logoClick = (route) => {
@@ -71,20 +80,39 @@ class App extends Component {
     let y = window.scrollY;
     //use plain js codes
     const navbar = document.querySelector('.navbar');    
+    if(!navbar) { return };
     if(y > 60) {
       navbar.style.backgroundColor = "black";
-    } else {
+    } else {      
       navbar.style.backgroundColor = "transparent";
     }
   }
 
+  
+
   render() {    
     let moviePick;
-    const { popular, top_rated, upcoming, movieSelect, cast, crew, route, movieSearch } = this.state;
-    
+    const { popular, top_rated, upcoming, movieSelect, cast, crew, route, movieSearch, movieRec } = this.state;    
     if(!popular[0] || !top_rated[0] || !upcoming[0]) {
       moviePick = []  
     } else { moviePick = [popular[0], top_rated[3], upcoming[0]] }
+
+    const titleImages = (array) => {
+      return array.map(item => {
+        if(!item.poster_path) { return null }
+        return (
+          <img 
+            key={item.id}
+            src={`http://image.tmdb.org/t/p/w92/${item.poster_path}`} 
+            alt={item.title} 
+            onClick={() => this.movieClick(item.id)}
+          />      
+        )
+      })
+    }
+    
+    const imageSearch = titleImages(movieSearch);
+    const imageRec = titleImages(movieRec);
 
     return (      
       <div>
@@ -92,8 +120,7 @@ class App extends Component {
           logoClick={this.logoClick} 
           handleScroll={this.handleScroll}
           handleSearch={this.handleSearch}
-          getSearch={movieSearch}
-          movieClick={this.movieClick}
+          imageSearch={imageSearch}
         />
         {route === 'home'?
           <div>            
@@ -102,21 +129,12 @@ class App extends Component {
               movieClick={this.movieClick}
             />
             <div className="movie-category">
-              <h1 id="popular">Popular</h1>
               <CardList 
                 movieClick={this.movieClick}
-                movies={popular}          
-              />
-              <h1 id="top-rated">Top-rated</h1>
-              <CardList 
-                movieClick={this.movieClick}
-                movies={top_rated}          
-              />
-              <h1 id="upcoming">Upcoming</h1>
-              <CardList 
-                movieClick={this.movieClick}
-                movies={upcoming}          
-              />  
+                popular={popular}
+                topRated={top_rated}
+                upcoming={upcoming}
+              />              
             </div>                       
           </div>
           :<div>            
@@ -124,6 +142,8 @@ class App extends Component {
               movieSelect={movieSelect} 
               cast={cast}
               crew={crew}
+              movieClick={this.movieClick}
+              imageRec={imageRec}
             />
           </div>
         }
@@ -166,6 +186,10 @@ poster_path: xBHvZcjRiWyobQ9kxBhO6B2dtRI.jpg
 backdrop_path: 5BwqwxMEjeFtdknRV792Svo0K1v.jpg
 https://image.tmdb.org/t/p/w1280//5BwqwxMEjeFtdknRV792Svo0K1v.jpg
 
+
+
+similar movies
+https://api.themoviedb.org/3/movie/{movie_id}/similar?api_key=<<api_key>>&language=en-US&page=1
 */
 
 
