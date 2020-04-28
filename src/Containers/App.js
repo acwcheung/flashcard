@@ -17,8 +17,8 @@ class App extends Component {
       movieSelect: {},
       cast: [],
       crew:[],      
-      route: 'home',      
-      searchfield: ''    
+      route: 'home',
+      movieSearch: []      
     }    
   };
 
@@ -38,23 +38,21 @@ class App extends Component {
   }
 
   handleSearch = (e) => {
-    this.setState({
-      searchfield: e.target.value
-    });
+    const text = e.target.value;    
+    if(text) {
+      fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${text}`)
+        .then(resp => resp.json())
+        .then(movies => this.setState({ movieSearch: movies.results }))  
+    } else {
+      this.setState({ movieSearch: [] })
+    }    
   };
 
   movieClick = (id) => {
     fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`)
       .then(resp => resp.json())
-      .then(movie => {
-        if(movie) {
-          this.setState({
-          movieSelect: movie,
-          route: 'movie'          
-          });      
-        } else {
-          console.log(movie)
-        }               
+      .then(movie => {        
+        this.setState({movieSelect: movie, route: 'movie', movieSearch: []});        
       })
       
     fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}`)
@@ -81,26 +79,27 @@ class App extends Component {
   }
 
   render() {    
-    let moviePick;    
-    const { popular, top_rated, upcoming, movieSelect, cast, crew, route } = this.state;
-    //data  validation for state properties
+    let moviePick;
+    const { popular, top_rated, upcoming, movieSelect, cast, crew, route, movieSearch } = this.state;
+    
     if(!popular[0] || !top_rated[0] || !upcoming[0]) {
       moviePick = []  
-    } else {
-      moviePick = [popular[0], top_rated[3], upcoming[0]]  
-    }
-    
+    } else { moviePick = [popular[0], top_rated[3], upcoming[0]] }
+
     return (      
       <div>
         <Navigation           
           logoClick={this.logoClick} 
           handleScroll={this.handleScroll}
+          handleSearch={this.handleSearch}
+          getSearch={movieSearch}
+          movieClick={this.movieClick}
         />
         {route === 'home'?
           <div>            
             <Showcase 
               movies={moviePick}
-              movieClick={this.movieClick}              
+              movieClick={this.movieClick}
             />
             <div className="movie-category">
               <h1 id="popular">Popular</h1>
