@@ -10,7 +10,7 @@ import './App.css';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = {      
       popular: [],
       top_rated: [],
       upcoming: [],      
@@ -23,12 +23,12 @@ class App extends Component {
     }    
   };
 
-  componentDidMount() {
+  componentDidMount() {    
     const movieCategories = ['popular', 'top_rated', 'upcoming'];
-    movieCategories.forEach((movieCategory, i) => {
-      fetch(`https://api.themoviedb.org/3/movie/${movieCategory}?api_key=${apiKey}&language=en-US&page=1`)  
+    movieCategories.forEach(category => {      
+      fetch(`https://api.themoviedb.org/3/movie/${category}?api_key=${apiKey}&language=en-US&page=1`)  
         .then(resp => resp.json())
-        .then(data => this.setState({[movieCategory]: data.results}) )          
+        .then(data => this.setState({[category]: data.results}))                 
     })
     //scroll event     
     window.addEventListener('scroll', this.handleScroll, true);
@@ -86,24 +86,24 @@ class App extends Component {
     } else {      
       navbar.style.backgroundColor = "transparent";
     }
-  }
-
-  
+  }  
 
   render() {    
-    let moviePick;
     const { popular, top_rated, upcoming, movieSelect, cast, crew, route, movieSearch, movieRec } = this.state;    
+    const movies = [[...popular], [...top_rated], [...upcoming]];      
+
+    let moviePick;
     if(!popular[0] || !top_rated[0] || !upcoming[0]) {
       moviePick = []  
-    } else { moviePick = [popular[0], top_rated[3], upcoming[0]] }
-
+    } else { moviePick = [popular[0], top_rated[0], upcoming[0]] }    
+    
     const titleImages = (array) => {
       return array.map(item => {
         if(!item.poster_path) { return null }
         return (
           <img 
             key={item.id}
-            src={`http://image.tmdb.org/t/p/w92/${item.poster_path}`} 
+            src={`http://image.tmdb.org/t/p/w92${item.poster_path}`} 
             alt={item.title} 
             onClick={() => this.movieClick(item.id)}
           />      
@@ -125,15 +125,13 @@ class App extends Component {
         {route === 'home'?
           <div>            
             <Showcase 
-              movies={moviePick}
+              movies={moviePick} 
               movieClick={this.movieClick}
             />
             <div className="movie-category">
               <CardList 
                 movieClick={this.movieClick}
-                popular={popular}
-                topRated={top_rated}
-                upcoming={upcoming}
+                movies={movies}
               />              
             </div>                       
           </div>
@@ -158,38 +156,5 @@ export default App;
 
 
 
-
-/*
-movie database
-
-api key = 17c3fa534657a7495834bc8fb45a9c05
-example: https://api.themoviedb.org/3/movie/550?api_key=17c3fa534657a7495834bc8fb45a9c05
-
-url structure as below
-- base url: https://api.themoviedb.org/3
-- 3 ways to search: /search; /discover; /find
-- movie method: /movie?
-- api_key={}
-- query=<xxx>
-
-1. text-based search by string
-https://api.themoviedb.org/3/search/movie?api_key={api_key}&query=Jack+Reacher
-
-2. search by id
-https://api.themoviedb.org/3/movie/343611?api_key={api_key}
-
-3. poster path
-base url: http://image.tmdb.org/t/p/
-size: "w92", "w154", "w185", "w342", "w500", "w780", or "original"
-poster_path: xBHvZcjRiWyobQ9kxBhO6B2dtRI.jpg
-
-backdrop_path: 5BwqwxMEjeFtdknRV792Svo0K1v.jpg
-https://image.tmdb.org/t/p/w1280//5BwqwxMEjeFtdknRV792Svo0K1v.jpg
-
-
-
-similar movies
-https://api.themoviedb.org/3/movie/{movie_id}/similar?api_key=<<api_key>>&language=en-US&page=1
-*/
 
 

@@ -4,10 +4,10 @@ import React from 'react';
 function Card(props) { 
   const { poster_path, title, vote_average, id } = props.movie;  
   const movieClick = props.movieClick;
-  
+  if(!poster_path) { return null };    
   return (
 	<div className="card" onClick={()=>movieClick(id)}>
-  	  <img src={`http://image.tmdb.org/t/p/original/${poster_path}`} alt={title} />
+  	  <img src={`http://image.tmdb.org/t/p/original${poster_path}`} alt={title} />
   	  <p>{title} <span>{vote_average}</span></p>  	  
  	</div>	    	    
   );

@@ -6,7 +6,7 @@ function OneMovie( {movieSelect, cast, crew, imageRec} )  {
   
   let directorName = '';
   const director = crew.find(crew => crew.job === 'Director');
-  if(!director) { return } else {directorName = director.name}
+  if(!director) { return null } else {directorName = director.name}
   
   const itemList = (array, key) => {
   	let newArray = [];
@@ -25,7 +25,7 @@ function OneMovie( {movieSelect, cast, crew, imageRec} )  {
   	return newArray.map(item => {      
   	  return (
   		<div className="profile" key={key === 'character'? item.id: item.credit_id }>
-	  	  <img src={`http://image.tmdb.org/t/p/w92/${item.profile_path}`} alt={item.name} />
+	  	  <img src={`http://image.tmdb.org/t/p/w92${item.profile_path}`} alt={item.name} />
 	  		<p>{item['name']}</p>
 	  		<p className="character">{key === 'character'? `as ${item[key]}`: item[key]}</p>
   		  </div>	
