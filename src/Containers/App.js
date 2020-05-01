@@ -3,6 +3,7 @@ import CardList from '../Components/CardList';
 import OneMovie from '../Components/OneMovie';
 import Showcase from '../Components/Showcase';
 import Navigation from '../Components/Navigation';
+import Footer from '../Components/Footer';
 import apiKey from '../api.js';
 import './App.css';
 
@@ -145,6 +146,7 @@ class App extends Component {
             />
           </div>
         }
+        <Footer />
       </div>
     )
   }  
