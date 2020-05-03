@@ -122,6 +122,7 @@ class App extends Component {
           handleScroll={this.handleScroll}
           handleSearch={this.handleSearch}
           imageSearch={imageSearch}
+          route={route}
         />
         {route === 'home'?
           <div>            

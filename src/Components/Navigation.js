@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
-function Navigation( {logoClick, handleSearch, imageSearch} )  {
+function Navigation( {logoClick, handleSearch, imageSearch, route} )  {
   
   const iconClick = () => {    
     const body = document.querySelector('body');
@@ -13,9 +13,9 @@ function Navigation( {logoClick, handleSearch, imageSearch} )  {
 	  <nav className="navbar">
       <ul>
         <li className="logo" onClick={()=>logoClick('home')}><a href="#home">M</a></li>
-        <li><a href="#popular">Popular</a></li>
-        <li><a href="#top-rated">Top Rated</a></li>
-        <li><a href="#upcoming">Upcoming</a></li>
+        <li><a href="#popular" style={route !== 'home'? {display: 'none'}: {display: 'block'}} >Popular</a></li>
+        <li><a href="#top-rated" style={route !== 'home'? {display: 'none'}: {display: 'block'}}>Top Rated</a></li>
+        <li><a href="#upcoming" style={route !== 'home'? {display: 'none'}: {display: 'block'}}>Upcoming</a></li>
         <li className="search">
           <FontAwesomeIcon 
             icon={faSearch} 

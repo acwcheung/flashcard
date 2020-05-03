@@ -8,8 +8,7 @@ function CardList( {movies, movieClick} ) {
 
   const handleMouseOverClick = (n) => {
     arrowLeft = document.querySelectorAll('.arrow-left');
-    arrowRight = document.querySelectorAll('.arrow-right');
-    console.log(ml[n]);
+    arrowRight = document.querySelectorAll('.arrow-right');    
     if(ml[n] > -270) {arrowRight[n].style.opacity = '1'}
       else (arrowRight[n].style.opacity = '0')
     if(ml[n] < 0) {arrowLeft[n].style.opacity = '1'}  
